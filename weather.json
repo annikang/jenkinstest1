@@ -1,0 +1,417 @@
+{
+	"info": {
+		"_postman_id": "5b936ff8-181a-4948-a35b-0f825480c103",
+		"name": "weather",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "tc_1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2de4c931-fb9a-4001-8979-aa5725f0da0f",
+						"exec": [
+							"//获取返回值是json结构的报文方法，jsonData是json对象\r",
+							"var jsonData = pm.response.json();\r",
+							"// 将响应内容JSON字符串转换成JSON对象\r",
+							"var respObj=JSON.parse(responseBody);\r",
+							"// 从JSON对象中获取国家\r",
+							"var country = respObj[\"sys\"][\"country\"];\r",
+							"// 从JSON对象中获取天气温度\r",
+							"var temp = respObj[\"main\"][\"temp\"];\r",
+							"// 开始断言....\r",
+							"//断言国家\r",
+							"pm.test(\"查询到国家:\"+country, function () {\r",
+							"    pm.expect(jsonData.sys.country).to.have.lengthOf(2);\r",
+							"});\r",
+							"//温度\r",
+							"pm.test(\"城市温度:\"+temp, function () {\r",
+							"   var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.main.temp).to.match(/^\\d{3}\\.?\\d{0,2}/);//温度\r",
+							"})\r",
+							"//状态码\r",
+							"pm.test(\"响应码为200\",function(){\r",
+							"    pm.expect(responseCode.code).to.eql(200);\r",
+							"});\r",
+							"//响应时间\r",
+							"tests[\"响应时间小于1000毫秒\"]=responseTime<1000;"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "3228e8ba-dd3c-4e63-b15f-bb1afe7b38c0",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "api.openweathermap.org/data/2.5/weather?q=dalian&appid=6d36230fde998676df8e1a8700a649ed",
+					"host": [
+						"api",
+						"openweathermap",
+						"org"
+					],
+					"path": [
+						"data",
+						"2.5",
+						"weather"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1814087",
+							"disabled": true
+						},
+						{
+							"key": "q",
+							"value": "{{name}}",
+							"disabled": true
+						},
+						{
+							"key": "q",
+							"value": "dalian"
+						},
+						{
+							"key": "lon",
+							"value": "121.6",
+							"disabled": true
+						},
+						{
+							"key": "lat",
+							"value": "39.92",
+							"disabled": true
+						},
+						{
+							"key": "zip",
+							"value": "10001,us",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "5141",
+							"disabled": true
+						},
+						{
+							"key": "lon",
+							"value": "-75.01",
+							"disabled": true
+						},
+						{
+							"key": "lat",
+							"value": "41.71",
+							"disabled": true
+						},
+						{
+							"key": "appid",
+							"value": "6d36230fde998676df8e1a8700a649ed"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tc_2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d997db90-1793-4347-a850-18d2bd9bcf2e",
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"var respObj=JSON.parse(responseBody);\r",
+							"var temp = respObj[\"current\"][\"temp\"];\r",
+							"var description = respObj[\"current\"][\"weather\"][\"main\"];\r",
+							"pm.test(\"城市温度:\"+temp, function () {\r",
+							"    pm.expect(jsonData.current.temp).to.match(/^\\d{3}\\.?\\d{0,2}/);//温度\r",
+							"});\r",
+							"pm.test(\"天气描述:\"+description, function () {\r",
+							"    pm.expect(jsonData.current.weather.main).to.match(/[a-zA-Z]/);//天气描述\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"cityid\": \"101070202\",\r\n    \"city\": \"沈阳\",\r\n    \"update_time\": \"09:59\",\r\n    \"wea\": \"阴\",\r\n    \"wea_img\": \"yin\",\r\n    \"tem\": \"21\",\r\n    \"tem_day\": \"24\",\r\n    \"tem_night\": \"20\",\r\n    \"win\": \"西南风\",\r\n    \"win_speed\": \"2级\",\r\n    \"win_meter\": \"小于12km/h\",\r\n    \"air\": \"35\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=38.91&lon=121.6&dt=1593479086&appid=6d36230fde998676df8e1a8700a649ed",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openweathermap",
+						"org"
+					],
+					"path": [
+						"data",
+						"2.5",
+						"onecall",
+						"timemachine"
+					],
+					"query": [
+						{
+							"key": "update_time",
+							"value": "10:12",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "101070202",
+							"disabled": true
+						},
+						{
+							"key": "lat",
+							"value": "38.91"
+						},
+						{
+							"key": "lon",
+							"value": "121.6"
+						},
+						{
+							"key": "dt",
+							"value": "1593479086"
+						},
+						{
+							"key": "q",
+							"value": "dalian",
+							"disabled": true
+						},
+						{
+							"key": "appid",
+							"value": "6d36230fde998676df8e1a8700a649ed"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tc_3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c21dc497-5fdc-4562-842f-53c8989bf560",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "api.openweathermap.org/data/2.5/forecast?zip=94040&appid=6d36230fde998676df8e1a8700a649ed",
+					"host": [
+						"api",
+						"openweathermap",
+						"org"
+					],
+					"path": [
+						"data",
+						"2.5",
+						"forecast"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1814089",
+							"disabled": true
+						},
+						{
+							"key": "q",
+							"value": "London",
+							"disabled": true
+						},
+						{
+							"key": "lat",
+							"value": "35",
+							"disabled": true
+						},
+						{
+							"key": "lon",
+							"value": "139",
+							"disabled": true
+						},
+						{
+							"key": "zip",
+							"value": "94040"
+						},
+						{
+							"key": "appid",
+							"value": "6d36230fde998676df8e1a8700a649ed"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tc_4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1dae4fa2-160c-425a-8a8b-4e15b675520b",
+						"exec": [
+							"pm.test(\"响应码为201\",function(){\r",
+							"    pm.expect(responseCode.code).to.eql(201);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f0ef8aca-470b-45ac-bd1b-ef30340084a5",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"time_period\":{\r\n      \"start\":{\r\n         \"expression\":\"after\",\r\n         \"amount\":132000000\r\n      },\r\n      \"end\":{\r\n         \"expression\":\"after\",\r\n         \"amount\":432000000\r\n      }\r\n   },\r\n   \"conditions\":[\r\n      {\r\n         \"name\":\"temp\",\r\n         \"expression\":\"$gt\",\r\n         \"amount\":299\r\n      }\r\n   ],\r\n   \"area\":[\r\n      {\r\n         \"type\":\"Point\",\r\n         \"coordinates\":[\r\n            53,\r\n            37\r\n         ]\r\n      }\r\n   ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://api.openweathermap.org/data/3.0/triggers?appid=6d36230fde998676df8e1a8700a649ed",
+					"protocol": "http",
+					"host": [
+						"api",
+						"openweathermap",
+						"org"
+					],
+					"path": [
+						"data",
+						"3.0",
+						"triggers"
+					],
+					"query": [
+						{
+							"key": "appid",
+							"value": "6d36230fde998676df8e1a8700a649ed"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tc_5",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"time_period\":{\r\n      \"start\":{\r\n         \"expression\":\"after\",\r\n         \"amount\":132000000\r\n      },\r\n      \"end\":{\r\n         \"expression\":\"after\",\r\n         \"amount\":132000000\r\n      }\r\n   },\r\n   \"conditions\":[\r\n      {\r\n         \"name\":\"temp\",\r\n         \"expression\":\"$lt\",\r\n         \"amount\":270\r\n      }\r\n   ],\r\n   \"area\":[\r\n      {\r\n         \"type\":\"Point\",\r\n         \"coordinates\":[\r\n            53,\r\n            37\r\n         ]\r\n      }\r\n   ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://api.openweathermap.org/data/3.0/triggers/5ef841e5fe790c00159d3cd4?appid=6d36230fde998676df8e1a8700a649ed",
+					"protocol": "http",
+					"host": [
+						"api",
+						"openweathermap",
+						"org"
+					],
+					"path": [
+						"data",
+						"3.0",
+						"triggers",
+						"5ef841e5fe790c00159d3cd4"
+					],
+					"query": [
+						{
+							"key": "appid",
+							"value": "6d36230fde998676df8e1a8700a649ed"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tc_6",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://api.openweathermap.org/data/3.0/triggers/5ef841e5fe790c00159d3cd4?appid=6d36230fde998676df8e1a8700a649ed",
+					"protocol": "http",
+					"host": [
+						"api",
+						"openweathermap",
+						"org"
+					],
+					"path": [
+						"data",
+						"3.0",
+						"triggers",
+						"5ef841e5fe790c00159d3cd4"
+					],
+					"query": [
+						{
+							"key": "appid",
+							"value": "6d36230fde998676df8e1a8700a649ed"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
