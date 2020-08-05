@@ -22,7 +22,7 @@ pipeline {
     //运行接口测试了，即用docker来运行newman
         stage('build') {
             steps {
-                sh 'docker run --rm -v \$(pwd):/etc/newman -t postman/newman:4.5-alpine run AuthPoint_Sub_Billing.postman_collection.json --insecure --environment=WGC-staging.postman_environment.json'
+                sh 'docker run --rm -v \$(pwd):/etc/newman -t postman/newman:4.5-alpine run weather.json --insecure'
             }
         }
     }
