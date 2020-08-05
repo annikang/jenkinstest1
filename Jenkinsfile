@@ -2,9 +2,9 @@ pipeline {
     agent {
         label "!master"
     }
-    options {
-        ansiColor('xterm')
-    }
+    //options {
+        //ansiColor('xterm')
+    //}
     //从git获取代码
     stages {
         stage('Get source code'){
